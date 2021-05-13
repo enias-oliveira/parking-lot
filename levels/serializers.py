@@ -24,6 +24,6 @@ class LevelsResponseSerializer(serializers.ModelSerializer):
 
     def get_available_spaces(self, obj):
         return {
-            "available_motorcycle_spaces": get_available_car_spaces(obj),
-            "available_car_spaces": get_available_motorcycle_spaces(obj),
+            "available_motorcycle_spaces": get_available_motorcycle_spaces(obj),
+            "available_car_spaces": get_available_car_spaces(obj),
         }

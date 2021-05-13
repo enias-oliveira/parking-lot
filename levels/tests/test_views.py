@@ -3,11 +3,12 @@ from rest_framework.test import APIClient
 
 
 class TestLevelView(TestCase):
-    def setUpData(self):
+    def setUp(self):
+        self.client = APIClient()
         self.level_data = {
             "name": "floor 1",
             "fill_priority": 2,
-            "motorcyle_spaces": 1,
+            "motorcycle_spaces": 1,
             "car_spaces": 2,
         }
 
@@ -23,25 +24,26 @@ class TestLevelView(TestCase):
             "password": "1234",
         }
 
-        self.client = APIClient()
+        self.client.post("/api/accounts/", self.admin_data, format="json")
 
-        self.admin_token = self.client(
-            "/api/accounts/", self.admin_data, format="json"
+        self.admin_token = self.client.post(
+            "/api/login/", self.admin_login, format="json"
         ).json()["token"]
 
     def test_create_level(self):
-        self.client.credentials(
-            HTTP_AUTHORIZATION="Token " + self.client.admin_token,
-        )
+
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + self.admin_token)
 
         level_response = self.client.post(
-            "/api/levels",
+            "/api/levels/",
             self.level_data,
             format="json",
         )
 
         expected = {
             "id": 1,
+            "name": "floor 1",
+            "fill_priority": 2,
             "available_spaces": {
                 "available_motorcycle_spaces": 1,
                 "available_car_spaces": 2,

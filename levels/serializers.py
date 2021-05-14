@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Level
+from .models import Level, Pricing
 
 from .services import get_available_car_spaces, get_available_motorcycle_spaces
 
@@ -27,3 +27,11 @@ class LevelsResponseSerializer(serializers.ModelSerializer):
             "available_motorcycle_spaces": get_available_motorcycle_spaces(obj),
             "available_car_spaces": get_available_car_spaces(obj),
         }
+
+
+class PricingSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = Pricing
+        fields = ["id", "a_coefficient", "b_coefficient"]

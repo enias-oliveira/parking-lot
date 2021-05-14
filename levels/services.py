@@ -1,6 +1,10 @@
 from .models import Level, Space
 
 
+def get_all_levels() -> list[Level]:
+    return Level.objects.all()
+
+
 def get_available_motorcycle_spaces(level: Level) -> int:
     filled_motorcycle = level.spaces.filter(
         variety=Space.VarietyChoices.CAR,

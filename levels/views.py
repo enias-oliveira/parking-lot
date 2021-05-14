@@ -1,17 +1,29 @@
 from rest_framework import status
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import Level
 
+from .permissions import IsAdmin
+
 from .serializers import LevelsRequestSerializer, LevelsResponseSerializer
+
+from .services import get_all_levels
 
 
 class LevelsView(APIView):
-    # TODO Procted view so that only admins can create levels
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAdmin]
 
     def get(self, request):
-        return Response({"msg": "Hello Levels!"})
+
+        serialized_levels = LevelsResponseSerializer(
+            get_all_levels(),
+            many=True,
+        )
+
+        return Response(serialized_levels.data, status=status.HTTP_200_OK)
 
     def post(self, request):
         serialized_request = LevelsRequestSerializer(data=request.data)

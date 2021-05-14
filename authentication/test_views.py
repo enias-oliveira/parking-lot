@@ -57,8 +57,8 @@ class TestAccountView(TestCase):
         login_response = self.client.post(
             "/api/login/",
             {
-                self.admin_data["username"],
-                self.admin_data["password"],
+                "username": self.admin_data["username"],
+                "password": self.admin_data["password"],
             },
             format="json",
         )

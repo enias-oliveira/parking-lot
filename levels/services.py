@@ -7,7 +7,7 @@ def get_all_levels() -> list[Level]:
 
 def get_available_motorcycle_spaces(level: Level) -> int:
     filled_motorcycle = level.spaces.filter(
-        variety=Space.VarietyChoices.CAR,
+        variety=Space.VarietyChoices.MOTORCYCLE,
         filled=True,
     ).count()
 

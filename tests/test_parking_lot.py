@@ -50,7 +50,7 @@ class TestInfrastructureView(TestCase):
         self.level_data = {
             "name": "floor 1",
             "fill_priority": 2,
-            "motorcyle_spaces": 1,
+            "motorcycle_spaces": 1,
             "car_spaces": 2,
         }
 

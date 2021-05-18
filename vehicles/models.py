@@ -11,7 +11,7 @@ class Vehicle(models.Model):
     )
 
     arrived_at = models.DateTimeField(auto_now_add=True)
-    paid_at = models.DateField(null=True)
+    paid_at = models.DateTimeField(null=True)
     amount_paid = models.FloatField(null=True)
 
     space = models.OneToOneField(

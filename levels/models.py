@@ -51,4 +51,7 @@ class Pricing(models.Model):
     b_coefficient = models.IntegerField()
 
     def calculate_pricing(self, hours_parked: float) -> float:
-        return self.a_coefficient + (self.b_coefficient * hours_parked)
+        return round(
+            self.a_coefficient + (self.b_coefficient * hours_parked),
+            2,
+        )

@@ -13,7 +13,7 @@ class VehicleRequestSerializer(serializers.Serializer):
     def validate_vehicle_type(self, value):
         vehicle_type_choices = {
             "car": Space.VarietyChoices.CAR,
-            "motorcylce": Space.VarietyChoices.MOTORCYCLE,
+            "motorcycle": Space.VarietyChoices.MOTORCYCLE,
         }
 
         if value not in vehicle_type_choices.keys():

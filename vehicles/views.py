@@ -18,15 +18,30 @@ class VehicleView(APIView):
                 serialized_request.errors, status=status.HTTP_400_BAD_REQUEST
             )
 
-        level = Level.objects.order_by("fill_priority")[0]
+        try:
+            levels_with_spaces = [
+                level
+                for level in Level.objects.order_by("fill_priority")
+                if level.has_available_spaces(
+                    serialized_request.data["vehicle_type"],
+                )
+            ]
 
-        space = Space.objects.create(
-            variety=serialized_request.data["vehicle_type"],
-            level=level,
-        )
+            level_with_spaces = levels_with_spaces[0]
 
-        vehicle = Vehicle.objects.create(**serialized_request.data, space=space)
+            space = Space.objects.create(
+                variety=serialized_request.data["vehicle_type"],
+                level=level_with_spaces,
+            )
 
-        serialized_vehicle = VehicleSerializer(vehicle)
+            vehicle = Vehicle.objects.create(**serialized_request.data, space=space)
 
-        return Response(serialized_vehicle.data, status=status.HTTP_201_CREATED)
+            serialized_vehicle = VehicleSerializer(vehicle)
+
+            return Response(serialized_vehicle.data, status=status.HTTP_201_CREATED)
+
+        except IndexError:
+            return Response(
+                {"msg": "No Levels or Spaces available"},
+                status=status.HTTP_404_NOT_FOUND,
+            )

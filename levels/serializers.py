@@ -2,8 +2,6 @@ from rest_framework import serializers
 
 from .models import Level, Pricing, Space
 
-from .services import get_available_car_spaces, get_available_motorcycle_spaces
-
 
 class LevelsRequestSerializer(serializers.Serializer):
     name = serializers.CharField()
@@ -22,10 +20,10 @@ class LevelsResponseSerializer(serializers.ModelSerializer):
         model = Level
         fields = ["id", "name", "fill_priority", "available_spaces"]
 
-    def get_available_spaces(self, obj):
+    def get_available_spaces(self, obj: Level):
         return {
-            "available_motorcycle_spaces": get_available_motorcycle_spaces(obj),
-            "available_car_spaces": get_available_car_spaces(obj),
+            "available_motorcycle_spaces": obj.get_available_motorcycle_spaces(),
+            "available_car_spaces": obj.get_available_car_spaces(),
         }
 
 
@@ -49,7 +47,7 @@ class SpaceSerializer(serializers.ModelSerializer):
     def get_variety(self, obj: Space):
         variety_choices = {
             Space.VarietyChoices.CAR.value: "car",
-            Space.VarietyChoices.MOTORCYCLE.value: "motorcylce",
+            Space.VarietyChoices.MOTORCYCLE.value: "motorcycle",
         }
 
         return variety_choices[obj.variety]

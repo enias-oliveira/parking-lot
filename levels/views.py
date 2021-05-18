@@ -13,8 +13,6 @@ from .serializers import (
     PricingSerializer,
 )
 
-from .services import get_all_levels
-
 
 class LevelsView(APIView):
     authentication_classes = [TokenAuthentication]
@@ -23,7 +21,7 @@ class LevelsView(APIView):
     def get(self, request):
 
         serialized_levels = LevelsResponseSerializer(
-            get_all_levels(),
+            Level.get_all_levels(),
             many=True,
         )
 

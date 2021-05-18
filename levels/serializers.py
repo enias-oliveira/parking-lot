@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Level, Pricing
+from .models import Level, Pricing, Space
 
 from .services import get_available_car_spaces, get_available_motorcycle_spaces
 
@@ -35,3 +35,24 @@ class PricingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pricing
         fields = ["id", "a_coefficient", "b_coefficient"]
+
+
+class SpaceSerializer(serializers.ModelSerializer):
+    variety = serializers.SerializerMethodField()
+    level_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Space
+        fields = ["id", "variety", "level_name"]
+        read_only_fields = ("id",)
+
+    def get_variety(self, obj: Space):
+        variety_choices = {
+            Space.VarietyChoices.CAR.value: "car",
+            Space.VarietyChoices.MOTORCYCLE.value: "motorcylce",
+        }
+
+        return variety_choices[obj.variety]
+
+    def get_level_name(self, obj: Space):
+        return obj.level.name

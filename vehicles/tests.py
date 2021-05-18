@@ -62,30 +62,27 @@ class TestVehicleView(TestCase):
 
         self.client.post(self.pricings_route, self.pricing_data, format="json")
 
-        self.vehicles_route = "/api/vehicles"
+        self.vehicles_route = "/api/vehicles/"
 
     def test_standard_vehicle_registration(self):
         expected_json_response = {
             "id": 1,
             "license_plate": "AYO1029",
             "vehicle_type": "car",
-            "arrived_at": datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%fZ"),
             "paid_at": None,
             "amount_paid": None,
             "space": {"id": 1, "variety": "car", "level_name": "floor 1"},
         }
 
-        expected_level_1 = (
-            {
-                "id": 1,
-                "name": "floor 1",
-                "fill_priority": 1,
-                "available_spaces": {
-                    "available_motorcycle_spaces": 20,
-                    "available_car_spaces": 49,
-                },
+        expected_level_1 = {
+            "id": 1,
+            "name": "floor 1",
+            "fill_priority": 1,
+            "available_spaces": {
+                "available_motorcycle_spaces": 2,
+                "available_car_spaces": 3,
             },
-        )
+        }
 
         vehicle_data = {"vehicle_type": "car", "license_plate": "AYO1029"}
 
@@ -95,7 +92,7 @@ class TestVehicleView(TestCase):
             format="json",
         )
 
-        self.assertAlmostEqual(actual_response.json(), expected_json_response)
+        self.assertDictContainsSubset(expected_json_response, actual_response.json())
 
         levels = self.client.get(self.levels_route).json()
         actual_level_1 = levels[0]

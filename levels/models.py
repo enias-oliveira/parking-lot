@@ -14,7 +14,6 @@ class Space(models.Model):
         MOTORCYCLE = "M"
 
     variety = models.CharField(choices=VarietyChoices.choices, max_length=1)
-    filled = models.BooleanField()
 
     level = models.ForeignKey(
         Level,
